@@ -170,10 +170,11 @@ void Account_Algorithm::Find_Isogram(string str) {
 
 		int logic = ((str[i] == str[i + 1]));
 
-		if (logic == true) {
+		if ((logic == true) && (str[i] < 1) || (str[i] > 1)) {
 
-			cout << "Not an Isogram" << " ";
-			
+			string Err = "Not an Isogram";
+
+				cout << Err << endl;
 		}
 		else{
 
