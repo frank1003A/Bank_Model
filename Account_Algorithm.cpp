@@ -7,7 +7,7 @@
 
 using namespace std;
 
-void Account_Algorithm::Read_Data() {
+void Account_Algorithm::Retrieve_Data() {
 	cout << "Enter First Name: ";
 	cin >> FirstName;
 	cout << endl;
@@ -20,12 +20,11 @@ void Account_Algorithm::Read_Data() {
 }
 
 int Account_Algorithm::Get_Account_Num() {
-	int i;
 	int rand1, rand2, rand3;
 	srand(time(0));
-	rand1 = rand() % 100;
-	rand2 = rand() % 100;
-	rand3 = rand() % 100;
+	rand1 = rand() % stoi("100");
+	rand2 = rand() % stoi("100");
+	rand3 = rand() % stoi("100");
 	Acc_Num = rand1 + rand2 + rand3;
 	cout <<"Generated Account Number: " << Acc_Num;
 	return 0;
@@ -34,26 +33,28 @@ int Account_Algorithm::Get_Account_Num() {
 void Account_Algorithm::Show_Data() {
 	string cc = "+234";
 	cout << endl;
+	cout << "Customer Record" << endl;
+	cout << "---------------------" << endl;
 	cout << "First Name: " << FirstName << endl;
 	cout << "Last Name: " << LastName << endl;
-	cout << "Phone Number:" << cc << Phone_Number << endl;
 	cout << "Account Number: " << Acc_Num << endl;
+	cout << "Phone Number:" << cc << Phone_Number << endl;
 }
 
 
 void Account_Algorithm::Write_to_Rec() {
 	fstream Bank;
-	Bank.open("Bank_Model_Data.txt", ios::app);
+	Bank.open("Bank_Model_Data.txt", ios::app | ios::binary);
 	if (!Bank) {
 		cout << endl << "File not created" << endl;
 	}
 	else {
-		    Read_Data();
+		    Retrieve_Data();
 			Get_Account_Num();
-			Bank << FirstName << endl;
-			Bank << LastName << endl;
+			Bank << FirstName << " ";
+			Bank << LastName  << " ";
+			Bank << Acc_Num <<  " ";
 			Bank << Phone_Number << endl;
-			Bank << Acc_Num << endl;
 			cout << endl;
 			Show_Data();
 		}
@@ -61,10 +62,25 @@ void Account_Algorithm::Write_to_Rec() {
 	Bank.close();
 }
 
+
+void Account_Algorithm::Read_Data() {
+	ifstream reader;
+	reader.open("Bank_Model_Data.txt", ios::out| ios::binary);
+	if (!reader) {
+		cout << "File Not Found" << endl;
+	}
+	else {
+		reader >> FirstName >> LastName >> Acc_Num >> Phone_Number;
+		// show the data read
+		Show_Data();
+	}
+}
+
 void Account_Algorithm::Search_Rec() {
 	int num;
+	int line;
 	ifstream bank;
-	bank.open("Bank_Model_Data.txt", ios::out);
+	bank.open("Bank_Model_Data.txt", ios::out|ios::binary);
 	if (!bank) {
 		cout << "File Not Found" << endl;
 	}
@@ -74,13 +90,21 @@ void Account_Algorithm::Search_Rec() {
 		cout << endl << "There are " << count << " record in the file." << endl;
 		cout << "Enter Record Number to search (Each collection is mapped by an odd Number): ";
 		cin >> num;
-		bank.seekg((num - 1) * sizeof("Bank_Model_Data"));
-		bank >> FirstName;
-		bank >> LastName;
-		bank >> Phone_Number;
-		bank >> Acc_Num;
-		Show_Data();
+
+		/*This Area was problematic, you should be carefull with how you handle this code.
+		Please avoid unnecesary modifcaition, as that could prove fatal for data return*/
+
+
+		for (int i = num; i <= count; i++) {
+			bank.seekg((num - i) * sizeof("Bank_Model_Data.txt"));
+		}
+
+		for (int j = num; j <= num; j++) {
+			Read_Data();
+		}
 		cout << endl;
+
+		//close the filestream
 		bank.close();
 	}
 }
@@ -112,7 +136,7 @@ void Account_Algorithm::Edit_Rec() {
 	Bank_write.seekp((n - 1) * sizeof("Bank_Model_Data.txt"));
 	cout << endl;
 	cout << "Enter Data to Modify: " << endl;
-	Read_Data();
+	Retrieve_Data();
 	Bank_write << FirstName << endl;
 	Bank_write << LastName << endl;
 	Bank_write << Phone_Number << endl;
@@ -183,6 +207,7 @@ void Account_Algorithm::Find_Isogram(string str) {
 		}
 	}
 }
+
 
 		  
 

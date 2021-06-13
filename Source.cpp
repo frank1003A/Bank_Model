@@ -5,22 +5,29 @@
 #include <string>
 #include "Account_Algorithm.h"
 
+
 using namespace std;
+
+#define DISPLAY std::cout << "Good";
+
+template <typename X>
+void sq_rt(X value) {
+	int result = std::sqrt(value);
+	std::cout << result;
+}
+
 
 
 int main() {
-	string str;
-	cout << "Type a Word: ";
-	cin >> str;
 	Account_Algorithm Account;
 	//Account.Del_Ent_Rec();
-	//Account.Read_Data();
+	//Account.Retrieve_Data();
 	//Account.Get_Account_Num();
 	//Account.Show_Data();
 	//Account.Write_to_Rec();
-	//Account.Search_Rec();
+	Account.Search_Rec();
 	//Account.Edit_Rec();
 	//Account.Del_a_Rec();
-	Account.Find_Isogram(str);
+	//Account.Find_Isogram(str);
 	//Account.Biometric(str);
 }
